@@ -124,11 +124,16 @@ export function redrawAll(canvas, strokes) {
     drawStroke(ctx, stroke, dpr)
   }
 }
-
 export function getCanvasPoint(canvas, clientX, clientY) {
-  const rect = canvas.getBoundingClientRect()
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  // Compute exact scale ratio between CSS pixels and internal canvas resolution
+  const scaleX = (canvas.width / dpr) / rect.width;
+  const scaleY = (canvas.height / dpr) / rect.height;
+
   return {
-    x: clientX - rect.left,
-    y: clientY - rect.top
-  }
+    x: (clientX - rect.left) * scaleX,
+    y: (clientY - rect.top) * scaleY
+  };
 }
